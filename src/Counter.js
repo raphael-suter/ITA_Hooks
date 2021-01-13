@@ -1,8 +1,9 @@
 import React, { useReducer } from "react";
-import { Button, Container } from "react-bootstrap";
+import { Button } from "react-bootstrap";
+import TextField from "./TextField";
 
 const Counter = () => {
-  const [count, dispatchCount] = useReducer((count, type) => {
+  const [count, dispatchCount] = useReducer((count, { type, value }) => {
     switch (type) {
       case "increment":
         return count + 1;
@@ -10,24 +11,37 @@ const Counter = () => {
         return count - 1;
       case "clear":
         return 0;
+      case "set":
+        return value;
       default:
         throw new Error();
     }
   }, 0);
 
   return (
-    <Container className="my-5">
-      <Button className="my-4" onClick={() => dispatchCount("increment")}>
+    <>
+      <Button
+        className="my-4"
+        onClick={() => dispatchCount({ type: "increment" })}
+      >
         +
       </Button>
       <p className="mb-0">{count}</p>
-      <Button className="my-4" onClick={() => dispatchCount("decrement")}>
+      <Button
+        className="my-4"
+        onClick={() => dispatchCount({ type: "decrement" })}
+      >
         -
       </Button>
-      <Button className="mx-4" onClick={() => dispatchCount("clear")}>
+      <Button className="mx-4" onClick={() => dispatchCount({ type: "clear" })}>
         clear
       </Button>
-    </Container>
+      <TextField
+        onChange={(evt) =>
+          dispatchCount({ type: "set", value: evt.target.value })
+        }
+      />
+    </>
   );
 };
 
